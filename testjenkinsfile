@@ -1,32 +1,32 @@
-// pipeline{
-//     agent any
-    
-//     stages{
-//         stage('install dep'){
-//             agent { docker { image 'node:9.8.0'}}
-//             steps{
-//                 sh 'npm install'
-//             }
-//         }
-//     }
-// }
-
-pipeline {
+pipeline{
     agent any
-
-    stages {
-        stage('install dep') {
-            agent {
-                docker {
-                    image 'node:9.8.0'
-                    args '-v $WORKSPACE:/workspace'  // Mount the Jenkins workspace to the container
-                }
-            }
-            steps {
-                dir('/workspace') {  // Ensure the commands run in the correct directory
-                    sh 'npm install'
-                }
+    
+    stages{
+        stage('install dep'){
+            agent { docker { image 'node:9.8.0'}}
+            steps{
+                sh 'npm install'
             }
         }
     }
 }
+
+// pipeline {
+//     agent any
+
+//     stages {
+//         stage('install dep') {
+//             agent {
+//                 docker {
+//                     image 'node:9.8.0'
+//                     args '-v $WORKSPACE:/workspace'  // Mount the Jenkins workspace to the container
+//                 }
+//             }
+//             steps {
+//                 dir('/workspace') {  // Ensure the commands run in the correct directory
+//                     sh 'npm install'
+//                 }
+//             }
+//         }
+//     }
+// }
