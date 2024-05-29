@@ -43,8 +43,8 @@ pipeline {
         //         sh 'curl -uadmin:AP8SE1YdzNofSCZookbU3YRsdnc -T *.tgz "http://ec2-3-84-158-195.compute-1.amazonaws.com:8081/artifactory/NodeApp/NodeApp.tgz"'
         //     }
         // }
-    }
-}
+//     }
+// }
 
 // pipeline {
 //     agent any
