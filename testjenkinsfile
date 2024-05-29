@@ -10,11 +10,19 @@ pipeline{
                 sh 'npm pack'
             }
         }
-        stage('upload to S3 bucket') {
+        stage('Upload Artifacts to S3') {
             steps {
-                sh 'aws s3 cp *.tgz s3://nodejss3/ --acl public-read'
-             }
+                 withAWS(region: us-east-1, credentials: AwsCredID ) {
+                    s3Upload(bucket: nodejss3, file: *.tgz)
+                }
+            }
         }
+
+        // stage('upload to S3 bucket') {
+        //     steps {
+        //         sh 'aws s3 cp *.tgz s3://nodejss3/node/ --acl public-read'
+        //      }
+        // }
 
         // stage('upload to artifactory'){
         //     steps{
