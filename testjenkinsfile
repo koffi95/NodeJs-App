@@ -1,22 +1,36 @@
-pipeline{
-   agent { docker { image 'node:14'
-                args '-u root:root'}}
+pipeline {
+    agent { 
+        docker { 
+            image 'node:14'
+            args '-u root:root' 
+        }
+    }
     
-    stages{
-        stage('install dep'){
-           
-            steps{
+    environment {
+        // Replace 'AwsCredID' with the actual credentials ID in Jenkins
+        AWS_CREDENTIALS_ID = 'AwsCredID'
+        AWS_REGION = 'us-east-1'
+        S3_BUCKET = 'nodejss3'
+        ARTIFACT_NAME = 'my-app-1.2.0.tgz'
+    }
+    
+    stages {
+        stage('Install Dependencies') {
+            steps {
                 sh 'npm install'
                 sh 'npm pack'
             }
         }
+        
         stage('Upload Artifacts to S3') {
             steps {
-                 withAWS(region: us-east-1, credentials: AwsCredID) {
-                    s3Upload(bucket: nodejss3, file: my-app.tgz)
+                withAWS(region: "${AWS_REGION}", credentials: "${AWS_CREDENTIALS_ID}") {
+                    s3Upload(bucket: "${S3_BUCKET}", path: "${ARTIFACT_NAME}", file: "${ARTIFACT_NAME}")
                 }
             }
         }
+    }
+}
 
         // stage('upload to S3 bucket') {
         //     steps {
