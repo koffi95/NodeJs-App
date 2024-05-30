@@ -70,6 +70,7 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
+                sh 'rm -rf my-app-*'
                 sh 'npm install'
                 sh 'npm pack'
                 sh "mv my-app-*.tgz ${ARTIFACT_NAME}"
