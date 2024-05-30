@@ -1,55 +1,3 @@
-pipeline {
-    agent { 
-        docker { 
-            image 'node:14'
-            args '-u root:root' 
-        }
-    }
-    
-    environment {
-        AWS_CREDENTIALS_ID = 'AwsCredID' 
-        AWS_REGION = 'us-east-1'
-        S3_BUCKET = 'nodejss3'
-        VERSION = "${BUILD_NUMBER}"
-        ARTIFACT_NAME = "my-app-${VERSION}.tgz"
-    }
-    
-    stages {
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm install'
-                sh 'npm pack'
-                // Rename the packed artifact with the version number
-                script {
-                    def file = sh(script: "ls my-app-*.tgz", returnStdout: true).trim()
-                    sh "mv ${file} ${ARTIFACT_NAME}"
-                }
-                // Verify the file exists
-                sh "ls -la ${ARTIFACT_NAME}"
-            }
-        }
-        
-        stage('Upload Artifacts to S3') {
-            steps {
-                withAWS(region: "${AWS_REGION}", credentials: "${AWS_CREDENTIALS_ID}") {
-                    s3Upload(bucket: "${S3_BUCKET}", path: "${ARTIFACT_NAME}", file: "${ARTIFACT_NAME}")
-                }
-            }
-        }
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
 // pipeline {
 //     agent { 
 //         docker { 
@@ -59,8 +7,7 @@ pipeline {
 //     }
     
 //     environment {
-//         // Replace 'AwsCredID' with the actual credentials ID in Jenkins
-//         AWS_CREDENTIALS_ID = 'AwsCredID'
+//         AWS_CREDENTIALS_ID = 'AwsCredID' 
 //         AWS_REGION = 'us-east-1'
 //         S3_BUCKET = 'nodejss3'
 //         VERSION = "${BUILD_NUMBER}"
@@ -72,7 +19,11 @@ pipeline {
 //             steps {
 //                 sh 'npm install'
 //                 sh 'npm pack'
-//                 sh "mv my-app-*.tgz ${ARTIFACT_NAME}"
+//                 // Rename the packed artifact with the version number
+//                 script {
+//                     def file = sh(script: "ls my-app-*.tgz", returnStdout: true).trim()
+//                     sh "mv ${file} ${ARTIFACT_NAME}"
+//                 }
 //                 // Verify the file exists
 //                 sh "ls -la ${ARTIFACT_NAME}"
 //             }
@@ -88,19 +39,68 @@ pipeline {
 //     }
 // }
 
-        // stage('upload to S3 bucket') {
-        //     steps {
-        //         sh 'aws s3 cp *.tgz s3://nodejss3/node/ --acl public-read'
-        //      }
-        // }
 
-        // stage('upload to artifactory'){
-        //     steps{
-        //         sh 'curl -uadmin:AP8SE1YdzNofSCZookbU3YRsdnc -T *.tgz "http://ec2-3-84-158-195.compute-1.amazonaws.com:8081/artifactory/NodeApp/NodeApp.tgz"'
-        //     }
-        // }
-//     }
-// }
+
+
+
+
+
+
+
+
+
+
+pipeline {
+    agent { 
+        docker { 
+            image 'node:14'
+            args '-u root:root' 
+        }
+    }
+    
+    environment {
+        // Replace 'AwsCredID' with the actual credentials ID in Jenkins
+        AWS_CREDENTIALS_ID = 'AwsCredID'
+        AWS_REGION = 'us-east-1'
+        S3_BUCKET = 'nodejss3'
+        VERSION = "${BUILD_NUMBER}"
+        ARTIFACT_NAME = "my-app-${VERSION}.tgz"
+    }
+    
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+                sh 'npm pack'
+                sh "mv my-app-*.tgz ${ARTIFACT_NAME}"
+                // Verify the file exists
+                sh "ls -la ${ARTIFACT_NAME}"
+            }
+        }
+        
+        stage('Upload Artifacts to S3') {
+            steps {
+                withAWS(region: "${AWS_REGION}", credentials: "${AWS_CREDENTIALS_ID}") {
+                    s3Upload(bucket: "${S3_BUCKET}", path: "${ARTIFACT_NAME}", file: "${ARTIFACT_NAME}")
+                }
+            }
+        }
+    }
+}
+
+        stage('upload to S3 bucket') {
+            steps {
+                sh 'aws s3 cp *.tgz s3://nodejss3/node/ --acl public-read'
+             }
+        }
+
+        stage('upload to artifactory'){
+            steps{
+                sh 'curl -uadmin:AP8SE1YdzNofSCZookbU3YRsdnc -T *.tgz "http://ec2-3-84-158-195.compute-1.amazonaws.com:8081/artifactory/NodeApp/NodeApp.tgz"'
+            }
+        }
+    }
+}
 
 // pipeline {
 //     agent any
