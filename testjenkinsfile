@@ -11,7 +11,8 @@ pipeline {
         AWS_CREDENTIALS_ID = 'AwsCredID'
         AWS_REGION = 'us-east-1'
         S3_BUCKET = 'nodejss3'
-        ARTIFACT_NAME = 'my-app-1.2.0.tgz'
+        VERSION = "${BUILD_NUMBER}"
+        ARTIFACT_NAME = "my-app-${VERSION}.tgz"
     }
     
     stages {
