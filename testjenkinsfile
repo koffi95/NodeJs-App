@@ -88,19 +88,19 @@ pipeline {
     }
 }
 
-        stage('upload to S3 bucket') {
-            steps {
-                sh 'aws s3 cp *.tgz s3://nodejss3/node/ --acl public-read'
-             }
-        }
+//         stage('upload to S3 bucket') {
+//             steps {
+//                 sh 'aws s3 cp *.tgz s3://nodejss3/node/ --acl public-read'
+//              }
+//         }
 
-        stage('upload to artifactory'){
-            steps{
-                sh 'curl -uadmin:AP8SE1YdzNofSCZookbU3YRsdnc -T *.tgz "http://ec2-3-84-158-195.compute-1.amazonaws.com:8081/artifactory/NodeApp/NodeApp.tgz"'
-            }
-        }
-    }
-}
+//         stage('upload to artifactory'){
+//             steps{
+//                 sh 'curl -uadmin:AP8SE1YdzNofSCZookbU3YRsdnc -T *.tgz "http://ec2-3-84-158-195.compute-1.amazonaws.com:8081/artifactory/NodeApp/NodeApp.tgz"'
+//             }
+//         }
+//     }
+// }
 
 // pipeline {
 //     agent any
